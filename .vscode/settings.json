@@ -1,3 +1,4 @@
 {
-  "conventionalCommits.scopes": ["Add Dependencies"]
+  "conventionalCommits.scopes": ["Add Dependencies", "Setup"],
+  "editor.inlineSuggest.showToolbar": "onHover"
 }
