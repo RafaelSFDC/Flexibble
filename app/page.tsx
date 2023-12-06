@@ -1,9 +1,9 @@
-import Image from "next/image";
-
 export default function Home() {
   return (
-    <main>
-      <h1>Hello, World!</h1>
-    </main>
+    <section className="flex-start flex-col paddings mb-16">
+      <h1>Categories </h1>
+      <h1>Posts</h1>
+      <h1>Load More</h1>
+    </section>
   );
 }
