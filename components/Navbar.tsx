@@ -1,8 +1,13 @@
+"use client";
+import React from "react";
 import { NavLinks } from "@/constants";
+import state from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
+import { useSnapshot } from "valtio";
+import ButtonMotion from "./framerMotion/ButtonMotion";
 const Navbar = () => {
-  const session = 0;
+  const snap = useSnapshot(state);
   return (
     <nav className="flexBetween navbar">
       <div className="flex-1 flexStart gap-10">
@@ -17,11 +22,30 @@ const Navbar = () => {
           ))}
         </ul>
       </div>
-      <div className="flexCemter gap-4">
-        {session ? (
+      <div className="flexCenter gap-4">
+        {state.logged ? (
           <>
-            UserPhoto
+            <Link href={"/profile/user"}>
+              <Image
+                src={
+                  state.user.image
+                    ? state.user.image
+                    : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+                }
+                alt="user"
+                width={40}
+                height={40}
+              />
+            </Link>
+
             <Link href={"/create-project"}>Share Work</Link>
+            <ButtonMotion
+              type="button"
+              className="text-sm"
+              onClick={() => (state.logged = false)}
+            >
+              Sign Out
+            </ButtonMotion>
           </>
         ) : (
           <>
