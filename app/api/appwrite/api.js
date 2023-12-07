@@ -149,35 +149,7 @@ export const appWriteGetUsers = async () => {
 //==================================
 // CREATE DOCUMENTS
 //==================================
-export async function appWriteCreateUser(user, setLoading) {
-    try {
-        const newAccount = await account.create(
-            ID.unique(),
-            user.email,
-            user.password,
-            user.username,
-        );
 
-        if (!newAccount) throw Error;
-
-        const avatarUrl = avatars.getInitials(user.name);
-
-        const newUser = await appWriteSaveUserToDB({
-            accountId: newAccount.$id,
-            name: newAccount.name,
-            email: newAccount.email,
-            username: user.username,
-            imageUrl: avatarUrl,
-        });
-
-        return newUser;
-    } catch (error) {
-        console.log("THE ERROR", error);
-        throw error
-    } finally {
-        setLoading(false)
-    }
-}
 export async function appWriteSaveUserToDB(user) {
     try {
         const newUser = await databases.createDocument(

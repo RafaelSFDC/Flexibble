@@ -11,7 +11,16 @@ import ButtonMotion from "./framerMotion/ButtonMotion";
 const ProjectForm = ({ type }: { type: string }) => {
   const [selectedImage, setSelectedImage] = useState("");
 
-  const handleFormSubmit = (e: React.FormEvent) => {};
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data: { [key: string]: any } = {};
+    formData.forEach((value, key) => {
+      data[key] = value;
+    });
+    console.log("RESULTADO DA FUNÇÃO FORMAT FORM:", data);
+    console.log(data);
+  };
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) {
@@ -36,6 +45,7 @@ const ProjectForm = ({ type }: { type: string }) => {
         <input
           id="image"
           type="file"
+          name="image"
           accept="image/*"
           required={type === "create"}
           className="form_image-input"
@@ -65,7 +75,7 @@ const ProjectForm = ({ type }: { type: string }) => {
       <FormField
         title="Website URL"
         type="url"
-        name="url"
+        name="liveSiteUrl"
         placeholder="Enter the URL of your project"
       />
       <FormField
@@ -76,7 +86,7 @@ const ProjectForm = ({ type }: { type: string }) => {
       />
       <CustomMenu title="Category" filters={categoryFilters} name="category" />
       <div className="flexStart w-full">
-        <ButtonMotion type="submit" onClick={() => toast.error("aaaaaa")}>
+        <ButtonMotion type="submit" leftIcon="/plus.svg">
           Create
         </ButtonMotion>
       </div>

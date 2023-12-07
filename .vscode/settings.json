@@ -2,7 +2,8 @@
   "conventionalCommits.scopes": [
     "Add Dependencies",
     "Setup",
-    "Added Components"
+    "Added Components",
+    "Fix"
   ],
   "editor.inlineSuggest.showToolbar": "onHover"
 }
