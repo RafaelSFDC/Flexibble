@@ -17,7 +17,6 @@ export const checkUser = async () => {
             appwriteConfig.userCollectionId,
             [Query.equal("accountId", response.$id)]
         )
-        appWriteGetProjects()
         state.userCollection = userCollection.documents[0].$id
         state.userInfo = userCollection.documents[0]
         return response
@@ -85,7 +84,7 @@ export const appWriteGetProjects = async () => {
         appwriteConfig.projectsCollectionId,
     )
     console.log("the projects", response)
-    state.projects = response
+    state.projects = response.documents
     return response
 }
 //==================================

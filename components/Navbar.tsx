@@ -7,11 +7,13 @@ import Link from "next/link";
 import { useSnapshot } from "valtio";
 import ButtonMotion from "./framerMotion/ButtonMotion";
 import { checkUser } from "@/app/api/appwrite/api";
+import { appWriteGetProjects } from "./../app/api/appwrite/api";
 const Navbar = () => {
   const snap = useSnapshot(state);
   useEffect(() => {
     return () => {
       checkUser();
+      appWriteGetProjects();
     };
   }, []);
   return (
