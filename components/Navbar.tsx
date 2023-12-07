@@ -49,8 +49,12 @@ const Navbar = () => {
           </>
         ) : (
           <>
-            <button className="btn btn-ghost btn-small">Sign In</button>
-            <button className="btn btn-primary btn-small">Sign Up</button>
+            <Link href="login">
+              <button className="btn btn-ghost btn-small">Sign In</button>
+            </Link>
+            <Link href="create-account">
+              <button className="btn btn-primary btn-small">Sign Up</button>
+            </Link>
           </>
         )}
       </div>
