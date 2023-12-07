@@ -8,8 +8,6 @@ import { useRouter } from "next/navigation";
 
 const LoginForm = ({ type }: { type: string }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState("");
-
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);

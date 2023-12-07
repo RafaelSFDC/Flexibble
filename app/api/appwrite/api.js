@@ -20,6 +20,7 @@ export const checkUser = async () => {
         )
         state.userCollection = userCollection.documents[0].$id
         state.userInfo = userCollection.documents[0]
+        console.log("logged")
         return response
     } catch (error) {
         state.logged = false

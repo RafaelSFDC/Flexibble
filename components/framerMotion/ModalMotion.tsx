@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from "react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
@@ -20,14 +20,22 @@ const ModalMotion = ({ children }: { children: React.ReactNode }) => {
   );
 
   return (
-    <motion.div ref={overlay} className="modal" onClick={handleClick}>
-      <button className="absolute top-4 right-8" onClick={onDismiss}>
-        <Image src="/close.svg" alt="close" width={17} height={17} />
-      </button>
-      <div ref={wrapper} className="modal_wrapper">
-        {children}
-      </div>
-    </motion.div>
+    <AnimatePresence>
+      <motion.div ref={overlay} className="modal" onClick={handleClick}>
+        <button className="absolute top-4 right-8" onClick={onDismiss}>
+          <Image src="/close.svg" alt="close" width={17} height={17} />
+        </button>
+        <motion.div
+          ref={wrapper}
+          className="modal_wrapper"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+        >
+          {children}
+        </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
