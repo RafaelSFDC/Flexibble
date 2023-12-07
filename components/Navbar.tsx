@@ -1,13 +1,19 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { NavLinks } from "@/constants";
 import state from "@/store/store";
 import Image from "next/image";
 import Link from "next/link";
 import { useSnapshot } from "valtio";
 import ButtonMotion from "./framerMotion/ButtonMotion";
+import { checkUser } from "@/app/api/appwrite/api";
 const Navbar = () => {
   const snap = useSnapshot(state);
+  useEffect(() => {
+    return () => {
+      checkUser();
+    };
+  }, []);
   return (
     <nav className="flexBetween navbar">
       <div className="flex-1 flexStart gap-10">
@@ -23,12 +29,12 @@ const Navbar = () => {
         </ul>
       </div>
       <div className="flexCenter gap-4">
-        {state.logged ? (
+        {snap.logged ? (
           <>
             <Link href={"/profile/user"}>
               <Image
                 src={
-                  state.user.image
+                  snap.user.image
                     ? state.user.image
                     : "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
                 }
@@ -39,21 +45,21 @@ const Navbar = () => {
             </Link>
 
             <Link href={"/create-project"}>Share Work</Link>
-            <ButtonMotion
-              type="button"
-              className="text-sm"
-              onClick={() => (state.logged = false)}
-            >
+            <ButtonMotion type="button" className="text-sm">
               Sign Out
             </ButtonMotion>
           </>
         ) : (
           <>
             <Link href="login">
-              <button className="btn btn-ghost btn-small">Sign In</button>
+              <ButtonMotion className="btn btn-ghost btn-small">
+                Sign In
+              </ButtonMotion>
             </Link>
             <Link href="create-account">
-              <button className="btn btn-primary btn-small">Sign Up</button>
+              <ButtonMotion className="btn btn-primary btn-small bg">
+                Sign Up
+              </ButtonMotion>
             </Link>
           </>
         )}

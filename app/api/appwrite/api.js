@@ -1,26 +1,25 @@
-import { account, appwriteConfig, avatars, client, databases } from "./AppWriteConfig";
+import { account, appwriteConfig, avatars, client, databases, storage } from "./AppWriteConfig";
 import { ID, Query } from "appwrite";
 import { toast } from 'sonner';
 import state from "@/store/store";
 
 
 //==================================
-// CREDENTIALS
+// FUNCTIONS
 //==================================
 export const checkUser = async () => {
     try {
         const response = await account.get()
         state.user = response
         state.logged = true
-        console.log(response)
         const userCollection = await databases.listDocuments(
             appwriteConfig.databaseId,
             appwriteConfig.userCollectionId,
             [Query.equal("accountId", response.$id)]
         )
+        appWriteGetProjects()
         state.userCollection = userCollection.documents[0].$id
         state.userInfo = userCollection.documents[0]
-        console.log("logged")
         return response
     } catch (error) {
         state.logged = false
@@ -29,34 +28,8 @@ export const checkUser = async () => {
         state.loading.start = false
     }
 }
-export const appWriteLogin = async (userAccount) => {
-    try {
-        const response = await account.createEmailSession(userAccount.email, userAccount.password)
-        state.logged = true
-        return response;
-    } catch (error) {
-        throw new Error("Invalid credentials, please try again");
-    }
-}
-export const appWriteLogout = async () => {
-    const response = await account.deleteSession('current')
-    state.logged = false
-    return response
-}
 //==================================
-// GET DOCUMENTS
-//==================================
-// export const appWriteGetUsers = async () => {
-//     const response = await databases.listDocuments(
-//         appwriteConfig.databaseId,
-//         appwriteConfig.userCollectionId,
-//     )
-//     console.log("the users", response)
-//     state.users = response
-//     return response
-// }
-//==================================
-// CREATE DOCUMENTS
+// CREDENTIALS
 //==================================
 export async function appWriteCreateUser(user, setLoading) {
     console.log("user", user)
@@ -88,6 +61,58 @@ export async function appWriteCreateUser(user, setLoading) {
         setLoading(false)
     }
 }
+
+export const appWriteLogin = async (userAccount) => {
+    try {
+        const response = await account.createEmailSession(userAccount.email, userAccount.password)
+        state.logged = true
+        return response;
+    } catch (error) {
+        throw new Error("Invalid credentials, please try again");
+    }
+}
+export const appWriteLogout = async () => {
+    const response = await account.deleteSession('current')
+    state.logged = false
+    return response
+}
+//==================================
+// GET DOCUMENTS
+//==================================
+export const appWriteGetProjects = async () => {
+    const response = await databases.listDocuments(
+        appwriteConfig.databaseId,
+        appwriteConfig.projectsCollectionId,
+    )
+    console.log("the projects", response)
+    state.projects = response
+    return response
+}
+//==================================
+// CREATE DOCUMENTS
+//==================================
+export async function uploadFile(file) {
+    try {
+        const uploadedFile = await storage.createFile(
+            appwriteConfig.storageId,
+            ID.unique(),
+            file
+        );
+
+        const fileUrl = storage.getFilePreview(
+            appwriteConfig.storageId,
+            uploadedFile.$id,
+            2000,
+            2000,
+            "top",
+            100
+        );
+
+        return fileUrl;
+    } catch (error) {
+        throw error
+    }
+}
 export async function appWriteSaveUserToDB(user) {
     try {
         const newUser = await databases.createDocument(
@@ -103,6 +128,30 @@ export async function appWriteSaveUserToDB(user) {
             }
         );
         return newUser;
+    } catch (error) {
+        console.log("THE ERROR", error);
+        throw error
+    }
+}
+export async function appWriteCreateProject(project, selectedImage) {
+    try {
+        const file = await uploadFile(selectedImage)
+        console.log(file)
+        const newProject = await databases.createDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.projectsCollectionId,
+            ID.unique(),
+            {
+                title: project.title,
+                description: project.description,
+                image: file,
+                liveSiteUrl: project.liveSiteUrl,
+                githubUrl: project.githubUrl,
+                category: project.category,
+                createdBy: [state.userCollection],
+            }
+        );
+        return newProject;
     } catch (error) {
         console.log("THE ERROR", error);
         throw error

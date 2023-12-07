@@ -7,9 +7,13 @@ import CustomMenu from "./CustomMenu";
 import { toast } from "sonner";
 import { useState } from "react";
 import ButtonMotion from "./framerMotion/ButtonMotion";
+import { appWriteCreateProject } from "@/app/api/appwrite/api";
+import { useRouter } from "next/navigation";
 
 const ProjectForm = ({ type }: { type: string }) => {
   const [selectedImage, setSelectedImage] = useState("");
+  const [file, setFile] = useState<File | undefined>(undefined);
+  const router = useRouter();
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -20,6 +24,14 @@ const ProjectForm = ({ type }: { type: string }) => {
     });
     console.log("RESULTADO DA FUNÇÃO FORMAT FORM:", data);
     console.log(data);
+    toast.promise(appWriteCreateProject(data, file), {
+      loading: "Creating your project...",
+      success: (data) => {
+        router.push("/");
+        return `Your project has been created successfully`;
+      },
+      error: "Something went wrong, please try again later",
+    });
   };
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,6 +46,8 @@ const ProjectForm = ({ type }: { type: string }) => {
 
     const objectURL = URL.createObjectURL(file);
     setSelectedImage(objectURL);
+
+    setFile(file);
   };
 
   return (
