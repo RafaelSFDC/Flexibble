@@ -7,53 +7,41 @@ import state from "@/store/store";
 //==================================
 // CREDENTIALS
 //==================================
-// export const checkUser = async () => {
-//     try {
-//         const response = await account.get()
-//         state.user = response
-//         state.logged = true
-//         console.log(response)
-//         const userCollection = await databases.listDocuments(
-//             appwriteConfig.databaseId,
-//             appwriteConfig.userCollectionId,
-//             [Query.equal("accountId", response.$id)]
-//         )
-//         state.userCollection = userCollection.documents[0].$id
-//         state.userInfo = userCollection.documents[0]
-//         return response
-//     } catch (error) {
-//         state.logged = false
-//         return false
-//     } finally {
-//         state.loading.start = false
-//         // return
-//     }
-// }
-// export const appWriteLogin = async (email, password, loading) => {
-//     const logInd = async () => {
-//         try {
-//             const response = await account.createEmailSession(email, password)
-//             state.logged = true
-//             return response;
-//         } catch (error) {
-//             throw new Error("Invalid credentials, please try again");
-//         } finally {
-//             loading(false)
-//         }
-//     }
-//     toast.promise(logInd,
-//         {
-//             loading: "Logging in...",
-//             success: "Logged in successfully",
-//             error: "Error logging in, please try again",
-//         })
-
-// }
-// export const appWriteLogout = async () => {
-//     const response = await account.deleteSession('current')
-//     state.logged = false
-//     return response
-// }
+export const checkUser = async () => {
+    try {
+        const response = await account.get()
+        state.user = response
+        state.logged = true
+        console.log(response)
+        const userCollection = await databases.listDocuments(
+            appwriteConfig.databaseId,
+            appwriteConfig.userCollectionId,
+            [Query.equal("accountId", response.$id)]
+        )
+        state.userCollection = userCollection.documents[0].$id
+        state.userInfo = userCollection.documents[0]
+        return response
+    } catch (error) {
+        state.logged = false
+        return false
+    } finally {
+        state.loading.start = false
+    }
+}
+export const appWriteLogin = async (userAccount) => {
+    try {
+        const response = await account.createEmailSession(userAccount.email, userAccount.password)
+        state.logged = true
+        return response;
+    } catch (error) {
+        throw new Error("Invalid credentials, please try again");
+    }
+}
+export const appWriteLogout = async () => {
+    const response = await account.deleteSession('current')
+    state.logged = false
+    return response
+}
 //==================================
 // GET DOCUMENTS
 //==================================
