@@ -19,6 +19,7 @@ const state = proxy({
   activeUser: null,
   activeUserInfo: null,
   activeUserId: null,
+  activeFilter: "All",
   chatCrated: false,
   deletingProject: false,
 });

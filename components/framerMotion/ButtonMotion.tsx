@@ -24,8 +24,8 @@ const ButtonMotion = ({
     <motion.button
       type={type}
       disabled={disabled}
-      className={`flexCenter gap-3 px-4 py-3 rounded-xl text-sm font-medium max-md:w-full bg-primary-purple text-white ${
-        className ?? null
+      className={`flexCenter gap-3 px-4 py-3 rounded-xl text-sm font-medium max-md:w-full bg-primary-purple  ${
+        className ?? "text-white"
       }`}
       onClick={onClick}
       whileTap={{ scale: 0.9 }}
