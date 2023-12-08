@@ -6,6 +6,7 @@ import ModalMotion from "@/components/framerMotion/ModalMotion";
 import Link from "next/link";
 import Image from "next/image";
 import RelatedProjects from "./../../../components/RelatedProjects";
+import ProjectActions from "@/components/ProjectActions";
 
 const Project = () => {
   const snap = useSnapshot(state);
@@ -42,6 +43,7 @@ const Project = () => {
   );
   if (!projectDetails) return <ModalMotion>Loading...</ModalMotion>;
   console.log("FINDED PROJECT", userProjects);
+  console.log("CREATEDBY", projectDetails.createdBy[0].$id);
   return (
     <ModalMotion>
       <section className="flexBetween gap-y-8 max-w-4xl max-xs:flex-col w-full">
@@ -72,6 +74,11 @@ const Project = () => {
             </div>
           </div>
         </div>
+        {projectDetails.createdBy[0].$id === snap.userCollection && (
+          <div className="flex justify-end items-center gap-2">
+            <ProjectActions projectId={projectDetails?.$id} />
+          </div>
+        )}
       </section>
       <section className="mt-14">
         <Image

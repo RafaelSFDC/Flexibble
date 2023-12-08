@@ -12,6 +12,7 @@ const state = proxy({
   projects: [],
   user: {
     image: "",
+    $id: "",
   },
   activeChat: null,
   users: [],
