@@ -9,6 +9,7 @@ type ButtonProps = {
   leftIcon?: string;
   rightIcon?: string;
   onClick?: () => void;
+  disabled?: boolean;
 };
 const ButtonMotion = ({
   children,
@@ -17,10 +18,12 @@ const ButtonMotion = ({
   onClick,
   leftIcon,
   rightIcon,
+  disabled,
 }: ButtonProps) => {
   return (
     <motion.button
       type={type}
+      disabled={disabled}
       className={`flexCenter gap-3 px-4 py-3 rounded-xl text-sm font-medium max-md:w-full bg-primary-purple text-white ${
         className ?? null
       }`}

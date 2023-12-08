@@ -172,6 +172,7 @@ export async function appWriteCreateProject(project, selectedImage) {
 // DELETE DOCUMENTS
 //==================================
 export async function appWriteDeleteProject(id) {
+    state.deletingProject = true
     try {
         const response = await databases.deleteDocument(
             appwriteConfig.databaseId,
@@ -182,5 +183,7 @@ export async function appWriteDeleteProject(id) {
     } catch (error) {
         console.log("THE ERROR", error);
         throw error
+    } finally {
+        state.deletingProject = false
     }
 }

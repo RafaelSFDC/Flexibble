@@ -20,6 +20,7 @@ const state = proxy({
   activeUserInfo: null,
   activeUserId: null,
   chatCrated: false,
+  deletingProject: false,
 });
 
 export default state;
