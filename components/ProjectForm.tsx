@@ -6,7 +6,10 @@ import CustomMenu from "./CustomMenu";
 import { toast } from "sonner";
 import { useEffect, useState } from "react";
 import ButtonMotion from "./framerMotion/ButtonMotion";
-import { appWriteCreateProject } from "@/app/api/appwrite/api";
+import {
+  appWriteCreateProject,
+  appWriteEditProject,
+} from "@/app/api/appwrite/api";
 import { usePathname, useRouter } from "next/navigation";
 import state from "@/store/store";
 import { useSnapshot } from "valtio";
@@ -20,7 +23,7 @@ const ProjectForm = ({ type }: { type: string }) => {
   // EDIT FORM ONLY
   useEffect(() => {
     return () => {
-      setSelectedImage(projectDetails.image);
+      if (type === "edit") setSelectedImage(projectDetails.image);
     };
   }, []);
 
@@ -57,14 +60,26 @@ const ProjectForm = ({ type }: { type: string }) => {
     });
     console.log("RESULTADO DA FUNÇÃO FORMAT FORM:", data);
     console.log(data);
-    toast.promise(appWriteCreateProject(data, file), {
-      loading: "Creating your project...",
-      success: (data) => {
-        router.push("/");
-        return `Your project has been created successfully`;
-      },
-      error: "Something went wrong, please try again later",
-    });
+    console.log("type check:", type);
+    if (type === "create") {
+      toast.promise(appWriteCreateProject(data, file), {
+        loading: "Creating your project...",
+        success: (data) => {
+          router.push("/");
+          return `Your project has been created successfully`;
+        },
+        error: "Something went wrong, please try again later",
+      });
+    } else {
+      toast.promise(appWriteEditProject(data, file), {
+        loading: "Updating your project...",
+        success: (data) => {
+          router.push("/");
+          return `Your project has been updated successfully`;
+        },
+        error: "Something went wrong, please try again later",
+      });
+    }
   };
   const handleChangeImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -141,6 +156,9 @@ const ProjectForm = ({ type }: { type: string }) => {
         name="category"
         defaultValue={projectDetails?.category}
       />
+      {type === "edit" && (
+        <input type="text" name="$id" value={projectDetails.$id} hidden />
+      )}
       <div className="flexStart w-full">
         <ButtonMotion type="submit" leftIcon="/plus.svg">
           {type === "create" ? "Create Project" : "Update Project"}

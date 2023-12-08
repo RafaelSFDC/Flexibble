@@ -159,14 +159,49 @@ export async function appWriteCreateProject(project, selectedImage) {
 //==================================
 // EDIT DOCUMENTS
 //==================================
-// export const appWriteUpdateStatus = async (id) => {
-
-//     const response = await databases.updateDocument(appwriteConfig.databaseId, appwriteConfig.userCollectionId, state.userCollection, {
-//         status: id
-//     })
-//     console.log("RESPONSE", response)
-//     return response
-// }
+export async function appWriteEditProject(project, file) {
+    if (file && file.length > 0) {
+        try {
+            const file = await uploadFile(file)
+            const newProject = await databases.updateDocument(
+                appwriteConfig.databaseId,
+                appwriteConfig.projectsCollectionId,
+                project.$id,
+                {
+                    title: project.title,
+                    description: project.description,
+                    liveSiteUrl: project.liveSiteUrl,
+                    githubUrl: project.githubUrl,
+                    category: project.category,
+                    image: file,
+                }
+            );
+            return newProject;
+        } catch (error) {
+            console.log(error)
+            throw "Error uploading image"
+        }
+    } else {
+        try {
+            const newProject = await databases.updateDocument(
+                appwriteConfig.databaseId,
+                appwriteConfig.projectsCollectionId,
+                project.$id,
+                {
+                    title: project.title,
+                    description: project.description,
+                    liveSiteUrl: project.liveSiteUrl,
+                    githubUrl: project.githubUrl,
+                    category: project.category,
+                }
+            );
+            return newProject;
+        } catch (error) {
+            console.log(error)
+            throw "Error uploading image"
+        }
+    }
+}
 
 //==================================
 // DELETE DOCUMENTS
