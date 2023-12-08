@@ -4,7 +4,7 @@ import ModalMotion from "@/components/framerMotion/ModalMotion";
 import state from "@/store/store";
 import { useRouter } from "next/navigation";
 
-const CreateProject = () => {
+const EditProject = () => {
   if (!state.logged) {
     const router = useRouter();
     router.push("/");
@@ -12,10 +12,10 @@ const CreateProject = () => {
   }
   return (
     <ModalMotion>
-      <h3 className="modal-head-text">Create a New Project</h3>
-      <ProjectForm type="create" />
+      <h3 className="modal-head-text">Edit your project</h3>
+      <ProjectForm type="edit" />
     </ModalMotion>
   );
 };
 
-export default CreateProject;
+export default EditProject;

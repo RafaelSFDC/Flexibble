@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import ModalMotion from "@/components/framerMotion/ModalMotion";
 import Link from "next/link";
 import Image from "next/image";
-import RelatedProjects from "./../../../components/RelatedProjects";
+import RelatedProjects from "@/components/RelatedProjects";
 import ProjectActions from "@/components/ProjectActions";
 
 const Project = () => {

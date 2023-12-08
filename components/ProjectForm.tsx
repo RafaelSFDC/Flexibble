@@ -1,19 +1,52 @@
 "use client";
-
 import Image from "next/image";
 import FormField from "./FormField";
 import { categoryFilters } from "@/constants";
 import CustomMenu from "./CustomMenu";
 import { toast } from "sonner";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ButtonMotion from "./framerMotion/ButtonMotion";
 import { appWriteCreateProject } from "@/app/api/appwrite/api";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import state from "@/store/store";
+import { useSnapshot } from "valtio";
 
 const ProjectForm = ({ type }: { type: string }) => {
+  const snap = useSnapshot(state);
   const [selectedImage, setSelectedImage] = useState("");
   const [file, setFile] = useState<File | undefined>(undefined);
   const router = useRouter();
+
+  // EDIT FORM ONLY
+  useEffect(() => {
+    return () => {
+      setSelectedImage(projectDetails.image);
+    };
+  }, []);
+
+  const pathname = usePathname();
+  const path = pathname;
+  const value = path.split("project/")[1];
+  const projectIndex = snap.projects.findIndex(
+    (project: any) => project.$id === value
+  );
+  type ProjectDetails = {
+    $id: string;
+    title: string;
+    createdBy: [
+      {
+        $id: string;
+        name: string;
+        avatarURL: string;
+      }
+    ];
+    category: string;
+    image: string;
+    description: string;
+    liveSiteUrl: string;
+    githubUrl: string;
+  };
+  const projectDetails: ProjectDetails = snap.projects[projectIndex];
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -79,29 +112,38 @@ const ProjectForm = ({ type }: { type: string }) => {
         type="text"
         name="title"
         placeholder="Enter the title of your project"
+        defaultValue={projectDetails?.title}
       />
       <FormField
         title="Description"
         type="text"
         name="description"
         placeholder="Enter the description of your project"
+        defaultValue={projectDetails?.description}
       />
       <FormField
         title="Website URL"
         type="url"
         name="liveSiteUrl"
         placeholder="Enter the URL of your project"
+        defaultValue={projectDetails?.liveSiteUrl}
       />
       <FormField
         title="GitHub URL"
         type="url"
         name="githubUrl"
         placeholder="Enter the URL of your github repository"
+        defaultValue={projectDetails?.githubUrl}
       />
-      <CustomMenu title="Category" filters={categoryFilters} name="category" />
+      <CustomMenu
+        title="Category"
+        filters={categoryFilters}
+        name="category"
+        defaultValue={projectDetails?.category}
+      />
       <div className="flexStart w-full">
         <ButtonMotion type="submit" leftIcon="/plus.svg">
-          Create
+          {type === "create" ? "Create Project" : "Update Project"}
         </ButtonMotion>
       </div>
     </form>
