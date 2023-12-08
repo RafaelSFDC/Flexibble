@@ -171,3 +171,16 @@ export async function appWriteCreateProject(project, selectedImage) {
 //==================================
 // DELETE DOCUMENTS
 //==================================
+export async function appWriteDeleteProject(id) {
+    try {
+        const response = await databases.deleteDocument(
+            appwriteConfig.databaseId,
+            appwriteConfig.projectsCollectionId,
+            id
+        );
+        return response;
+    } catch (error) {
+        console.log("THE ERROR", error);
+        throw error
+    }
+}
