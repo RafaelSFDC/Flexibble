@@ -2,12 +2,12 @@
 import ProjectForm from "@/components/ProjectForm";
 import ModalMotion from "@/components/framerMotion/ModalMotion";
 import state from "@/store/store";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/router";
 
 const CreateProject = () => {
+  // const router = useRouter();
   if (!state.logged) {
-    const router = useRouter();
-    router.push("/");
+    // router.push("/");
     return null;
   }
   return (
