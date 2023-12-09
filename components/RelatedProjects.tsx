@@ -2,24 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 type Props = {
-  projects: [
-    {
+  projects: {
+    $id: string;
+    title: string;
+    createdBy: {
       $id: string;
-      title: string;
-      createdBy: [
-        {
-          $id: string;
-          name: string;
-          avatarURL: string;
-        }
-      ];
-      category: string;
-      image: string;
-      description: string;
-      liveSiteUrl: string;
-      githubUrl: string;
-    }
-  ];
+      name: string;
+      avatarURL: string;
+    }[];
+    category: string;
+    image: string;
+    description: string;
+    liveSiteUrl: string;
+    githubUrl: string;
+  }[];
 };
 const RelatedProjects = ({ projects }: Props) => {
   return (
